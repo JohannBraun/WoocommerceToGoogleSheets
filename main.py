@@ -19,8 +19,11 @@ SAMPLE_SPREADSHEET_ID = os.environ.get("SAMPLE_SPREADSHEET_ID")
 # Create gspread service account with credentials from keys
 gc = gspread.service_account(filename='keys.json')
 
+# max row in your google sheet. if you have more products, you need more rows
 MAX_ROWS = 500
+# name of the newly created sheet in which the products will be seen
 ROOT_SHEET = "products"
+# choose your own titles for the corresponding data that you pull.
 HEADER_ROW = ["id",
               "Art.-Nr.",
               "# Lager",
@@ -94,6 +97,9 @@ def get_from_woocommerce():
             except IndexError:
                 product_img_src = "invalid picture src"
 
+            # we dont want every single information out of woocommerce, in the following we filter for the
+            # data that we want. remember to name your row headers accordingly
+            # you can print(product) to see which variables woocommerce gives you
             product_category_values = [
                 product["id"],
                 product["sku"],
