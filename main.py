@@ -83,6 +83,7 @@ def get_from_woocommerce():
         "per_page": 50,
         "page": 1
     }
+    # the while loop runs as long as there are still products to pull
     while True:
         response = wcapi.get('products', params=product_data)
         products = response.json()
@@ -113,7 +114,7 @@ def get_from_woocommerce():
         product_data["page"] += 1
         print(response.status_code)
 
-        # After searching through all products, next page is empty, i.e the lenght is 0
+        # After searching through all products, next page is empty, i.e the lenght is 0, so we can stop searching
         if len(products) == 0:
             format_products()
             break
@@ -128,6 +129,8 @@ def format_products():
     gspread_formatting.format_cell_range(cur_sheet, f'G2:J{MAX_ROWS}', fmt)
 
 
+# function to push the data that we have in our sheet back to woocommerce
+# like that we can make changes in gsheets and see them directly on the page
 def push_to_woocommerce():
     products_in_sheet = cur_sheet.get_all_records()
     for product in products_in_sheet:
